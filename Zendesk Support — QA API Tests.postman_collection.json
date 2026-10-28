@@ -1,0 +1,354 @@
+{
+  "auth": {
+    "oauth2": [
+      {
+        "key": "tokenType",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "key": "token_id",
+        "type": "string",
+        "value": "3d7b179f-7b77-40c0-80cc-bf7f42d6dfd2"
+      },
+      {
+        "key": "accessToken",
+        "type": "string",
+        "value": "{{json_web_token_145l}}"
+      },
+      {
+        "key": "expires_in",
+        "type": "number",
+        "value": 1800
+      },
+      {
+        "key": "timestamp",
+        "type": "number",
+        "value": 1793182672525
+      },
+      {
+        "key": "clientId",
+        "type": "string",
+        "value": "{{auth_secret_14nx}}"
+      },
+      {
+        "key": "accessTokenUrl",
+        "type": "string",
+        "value": "{{base_url}}/oauth/tokens"
+      },
+      {
+        "key": "authUrl",
+        "type": "string",
+        "value": "{{base_url}}/oauth/authorizations/new"
+      },
+      {
+        "key": "tokenName",
+        "type": "string",
+        "value": "Zendesk QA — OAuth PKCE"
+      },
+      {
+        "key": "addTokenTo",
+        "type": "string",
+        "value": "header"
+      },
+      {
+        "key": "scope",
+        "type": "string",
+        "value": "tickets:read tickets:write"
+      },
+      {
+        "key": "client_authentication",
+        "type": "string",
+        "value": "body"
+      },
+      {
+        "key": "redirect_uri",
+        "type": "string",
+        "value": "https://oauth.pstmn.io/v1/callback"
+      },
+      {
+        "key": "grant_type",
+        "type": "string",
+        "value": "authorization_code_with_pkce"
+      },
+      {
+        "key": "useBrowser",
+        "type": "boolean",
+        "value": false
+      },
+      {
+        "key": "id",
+        "type": "string",
+        "value": "collection/dc4132c9-3c9c-44a9-b227-4a62da0065c3/ff6b4490-ff43-43d9-8af9-f298a96b1fc6"
+      }
+    ],
+    "type": "oauth2"
+  },
+  "info": {
+    "_collection_link": "https://go.postman.co/collection/59238697-dc4132c9-3c9c-44a9-b227-4a62da0065c3?source=collection_link",
+    "_exporter_id": "59238697",
+    "_postman_id": "dc4132c9-3c9c-44a9-b227-4a62da0065c3",
+    "name": "Zendesk Support — QA API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status HTTP deve ser 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Resposta deve conter uma lista de tickets\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.have.property(\"tickets\");\n    pm.expect(jsonData.tickets).to.be.an(\"array\");\n});\n\npm.test(\"Tickets devem conter campos essenciais\", function () {\n    const jsonData = pm.response.json();\n\n    jsonData.tickets.forEach(function (ticket) {\n        pm.expect(ticket).to.have.property(\"id\");\n        pm.expect(ticket).to.have.property(\"subject\");\n        pm.expect(ticket).to.have.property(\"status\");\n    });\n});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "name": "GET — Listar Tickets | 200 OK",
+      "request": {
+        "header": [],
+        "method": "GET",
+        "url": {
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v2",
+            "tickets.json"
+          ],
+          "raw": "{{base_url}}/api/v2/tickets.json"
+        }
+      },
+      "response": []
+    },
+    {
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status HTTP deve ser 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Resposta deve conter um ticket\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.have.property(\"ticket\");\n    pm.expect(jsonData.ticket).to.be.an(\"object\");\n});\n\npm.test(\"Ticket deve possuir ID 1 e campos essenciais\", function () {\n    const ticket = pm.response.json().ticket;\n\n    pm.expect(ticket.id).to.eql(1);\n    pm.expect(ticket).to.have.property(\"subject\");\n    pm.expect(ticket).to.have.property(\"status\");\n});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "name": "GET — Consultar Ticket por ID | 200 OK",
+      "request": {
+        "header": [],
+        "method": "GET",
+        "url": {
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v2",
+            "tickets",
+            "1.json"
+          ],
+          "raw": "{{base_url}}/api/v2/tickets/1.json"
+        }
+      },
+      "response": []
+    },
+    {
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "\npm.test(\"Status HTTP deve ser 201\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"Resposta deve conter um ticket criado\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.have.property(\"ticket\");\n    pm.expect(jsonData.ticket).to.be.an(\"object\");\n});\n\npm.test(\"Ticket criado deve possuir ID e campos essenciais\", function () {\n    const ticket = pm.response.json().ticket;\n\n    pm.expect(ticket.id).to.be.a(\"number\");\n    pm.expect(ticket.subject).to.eql(\"QA API - Teste de criacao de ticket\");\n    pm.expect(ticket.priority).to.eql(\"normal\");\n});\n\nconst ticketCriado = pm.response.json().ticket;\n\npm.environment.set(\"ticket_id\", ticketCriado.id);\n"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "name": "POST — Criar Ticket | 201 Created",
+      "request": {
+        "body": {
+          "mode": "raw",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          },
+          "raw": "\n{\n  \"ticket\": {\n    \"subject\": \"QA API - Teste de criacao de ticket\",\n    \"comment\": {\n      \"body\": \"Ticket criado durante os testes automatizados da API Zendesk.\"\n    },\n    \"priority\": \"normal\"\n  }\n}\n"
+        },
+        "header": [],
+        "method": "POST",
+        "url": {
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v2",
+            "tickets.json"
+          ],
+          "raw": "{{base_url}}/api/v2/tickets.json"
+        }
+      },
+      "response": []
+    },
+    {
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "\npm.test(\"Status HTTP deve ser 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Resposta deve conter o ticket atualizado\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.have.property(\"ticket\");\n    pm.expect(jsonData.ticket).to.be.an(\"object\");\n});\n\npm.test(\"Ticket deve possuir dados atualizados\", function () {\n    const ticket = pm.response.json().ticket;\n\npm.expect(ticket.id).to.eql(Number(pm.environment.get(\"ticket_id\")));\npm.expect(ticket.subject).to.eql(\"QA API - Ticket atualizado via PUT\");\npm.expect(ticket.priority).to.eql(\"high\");\n});\n"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "name": "PUT — Atualizar Ticket | 200 OK.",
+      "request": {
+        "body": {
+          "mode": "raw",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          },
+          "raw": "\n{\n  \"ticket\": {\n    \"subject\": \"QA API - Ticket atualizado via PUT\",\n    \"priority\": \"high\",\n    \"comment\": {\n      \"body\": \"Ticket atualizado durante os testes de API do projeto Zendesk QA.\",\n      \"public\": false\n    }\n  }\n}\n"
+        },
+        "header": [],
+        "method": "PUT",
+        "url": {
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v2",
+            "tickets",
+            "{{ticket_id}}.json"
+          ],
+          "raw": "{{base_url}}/api/v2/tickets/{{ticket_id}}.json"
+        }
+      },
+      "response": []
+    },
+    {
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "\npm.test(\"Status HTTP deve ser 404\", function () {\n    pm.response.to.have.status(404);\n});\n\npm.test(\"Resposta deve ser um JSON valido\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.be.an(\"object\");\n});\n\npm.test(\"Resposta deve indicar recurso inexistente\", function () {\n    const jsonData = pm.response.json();\n\n    pm.expect(jsonData).to.have.property(\"error\");\n    pm.expect(jsonData.error).to.be.a(\"string\").and.not.empty;\n});\n"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "name": "GET — Ticket Inexistente | 404 Not Found",
+      "request": {
+        "header": [],
+        "method": "GET",
+        "url": {
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v2",
+            "tickets",
+            "999999999.json"
+          ],
+          "raw": "{{base_url}}/api/v2/tickets/999999999.json"
+        }
+      },
+      "response": []
+    },
+    {
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "\npm.test(\"Status HTTP deve ser 401\", function () {\n    pm.response.to.have.status(401);\n});\n\npm.test(\"Resposta deve conter um JSON valido\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.be.an(\"object\");\n});\n\npm.test(\"Acesso sem autenticacao deve ser negado\", function () {\n    const jsonData = pm.response.json();\n\n    pm.expect(jsonData).to.have.property(\"error\");\n    pm.expect(jsonData.error).to.be.a(\"string\").and.not.empty;\n});\n"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "name": "GET — Sem Autenticação | 401 Unauthorized",
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      },
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [],
+        "method": "GET",
+        "url": {
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v2",
+            "tickets",
+            "4.json"
+          ],
+          "raw": "{{base_url}}/api/v2/tickets/4.json"
+        }
+      },
+      "response": []
+    },
+    {
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "\npm.test(\"Status HTTP deve ser 401\", function () {\n    pm.response.to.have.status(401);\n});\n\npm.test(\"Resposta deve conter um JSON valido\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.be.an(\"object\");\n});\n\npm.test(\"Token invalido deve ser rejeitado\", function () {\n    const jsonData = pm.response.json();\n\n    pm.expect(jsonData).to.have.property(\"error\");\n    pm.expect(jsonData.error).to.be.a(\"string\").and.not.empty;\n});\n"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "name": "GET — Token Inválido | 401 Unauthorized",
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      },
+      "request": {
+        "auth": {
+          "bearer": [
+            {
+              "key": "token",
+              "type": "string",
+              "value": "{{auth_secret_0ouo}}"
+            }
+          ],
+          "type": "bearer"
+        },
+        "header": [],
+        "method": "GET",
+        "url": {
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v2",
+            "tickets",
+            "4.json"
+          ],
+          "raw": "{{base_url}}/api/v2/tickets/4.json"
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "json_web_token_145l",
+      "secret": true
+    }
+  ]
+}
