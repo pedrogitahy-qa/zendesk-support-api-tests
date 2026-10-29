@@ -1,3 +1,4 @@
+![Zendesk Support — Project Banner](evidence/banner.png)
 
 # Zendesk Support — API Testing with Postman
 
